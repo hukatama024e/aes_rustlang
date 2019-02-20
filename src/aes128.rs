@@ -170,9 +170,9 @@ pub fn key_expansion( key : [u8; 4 * KEY_LENGTH] ) ->  [u32; BLOCK_SIZE*( ROUND_
     let mut temp : u32;
 
     while i < KEY_LENGTH {
-        round_key[i] = ( key[ i * 4] as u32 ) << 24 &
-                        ( key[ i * 4 + 1] as u32 ) << 16 & 
-                        ( key[ i * 4 + 2] as u32 ) << 8 &
+        round_key[i] = ( key[ i * 4] as u32 ) << 24 |
+                        ( key[ i * 4 + 1] as u32 ) << 16 | 
+                        ( key[ i * 4 + 2] as u32 ) << 8 |
                         ( key[ i * 4 + 3] as u32 );
         i += 1;
     }
@@ -196,7 +196,7 @@ pub fn key_expansion( key : [u8; 4 * KEY_LENGTH] ) ->  [u32; BLOCK_SIZE*( ROUND_
 fn sub_word( input : u32 ) -> u32 {
     let mut output : u32 = 0;
 
-    for i in 0..3 {
+    for i in 0..WORD_IN_BYTES_NUM {
         let byte_data : u8 = ( input >> ( ( 3 - i ) * 8 ) ) as u8;
         let x = ( ( byte_data & 0xF0 ) >> 4 ) as usize;
         let y = ( byte_data & 0x0F ) as usize;
@@ -208,7 +208,7 @@ fn sub_word( input : u32 ) -> u32 {
 }
 
 fn rot_word( input : u32 ) -> u32 {
-    let output : u32 = ( input >> 8 ) & ( input >> 24 );
+    let output : u32 = ( input << 8 ) | ( input >> 24 );
 
     return output;
 }
