@@ -148,7 +148,12 @@ fn multiplication( multiplicand : u8, multiplier : u8 ) -> u8 {
     let mut xtime_val : u8 = multiplicand;
     let mut result : u8 = 0;
 
-    for bit_pos in 1..8 {
+    //check LSB
+    if multiplier & 0x01 != 0 {
+        result = multiplicand;
+    }
+
+    for bit_pos in 1..7 {
         if xtime_val & 0x80 != 0 {
             xtime_val = ( ( xtime_val & 0x7F ) << 1 ) ^ IRR_POLYNOMIAL;
         }
@@ -156,7 +161,7 @@ fn multiplication( multiplicand : u8, multiplier : u8 ) -> u8 {
             xtime_val <<= 1;
         }
         
-        if ( 1 << bit_pos ) & multiplier != 0 {
+        if multiplier & ( 1 << bit_pos ) != 0 {
             result ^= xtime_val;
         }
     }
