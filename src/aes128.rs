@@ -36,7 +36,7 @@ pub fn cipher( plain_text : String, round_key : [u32; BLOCK_SIZE * ( ROUND_NUM +
 
     state = add_round_key( state, round_key, 0 );
 
-    for round in 1..ROUND_NUM - 1 {
+    for round in 1..ROUND_NUM {
         state = sub_bytes( state );
         state = shift_rows( state );
         state = mix_columns( state );
