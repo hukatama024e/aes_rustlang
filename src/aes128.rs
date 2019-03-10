@@ -169,16 +169,18 @@ fn multiplication( multiplicand : u8, multiplier : u8 ) -> u8 {
     return result;
 }
 
-pub fn key_expansion( key : [u8; 4 * KEY_LENGTH] ) ->  [u32; BLOCK_SIZE*( ROUND_NUM + 1 )] {
+pub fn key_expansion( key : String ) ->  [u32; BLOCK_SIZE*( ROUND_NUM + 1 )] {
     let mut round_key : [u32; BLOCK_SIZE * ( ROUND_NUM + 1 )] = [0; BLOCK_SIZE * ( ROUND_NUM + 1 )];
     let mut i : usize = 0;
     let mut temp : u32;
 
+    let key_u8 = hex::decode( key ).expect( "Failed to convert key in key_expansion" );
+
     while i < KEY_LENGTH {
-        round_key[i] = ( key[ i * 4] as u32 ) << 24 |
-                        ( key[ i * 4 + 1] as u32 ) << 16 | 
-                        ( key[ i * 4 + 2] as u32 ) << 8 |
-                        ( key[ i * 4 + 3] as u32 );
+        round_key[i] = ( key_u8[ i * 4] as u32 ) << 24 |
+                        ( key_u8[ i * 4 + 1] as u32 ) << 16 | 
+                        ( key_u8[ i * 4 + 2] as u32 ) << 8 |
+                        ( key_u8[ i * 4 + 3] as u32 );
         i += 1;
     }
 

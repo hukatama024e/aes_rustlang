@@ -26,8 +26,7 @@ fn test_cipher() {
 fn test_key_expansion() {
 
     //FIPS 197 p27 A.1 Expansion of a 128-bit Cipher Key
-    let key = [ 0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2,
-                0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c ];
+    let key = "2b7e151628aed2a6abf7158809cf4f3c";
     
     let expect : [u32; 44] = [ 0x2b7e_1516, 0x28ae_d2a6, 0xabf7_1588, 0x09cf_4f3c, 0xa0fa_fe17, 0x8854_2cb1, 
                                0x23a3_3939, 0x2a6c_7605, 0xf2c2_95f2, 0x7a96_b943, 0x5935_807a, 0x7359_f67f,
@@ -38,7 +37,7 @@ fn test_key_expansion() {
                                0xac77_66f3, 0x19fa_dc21, 0x28d1_2941, 0x575c_006e, 0xd014_f9a8, 0xc9ee_2589,
                                0xe13f_0cc8, 0xb663_0ca6 ];
 
-    let actual_result = aes128::key_expansion( key );
+    let actual_result = aes128::key_expansion( key.to_string() );
 
     for i in 0..expect.len() {
         assert_eq!( actual_result[i], expect[i] );
