@@ -3,6 +3,8 @@ name = "aes_rustlang"
 version = "0.1.0"
 authors = ["hukatama024e <physaliaphysalisdev@gmail.com>"]
 edition = "2018"
+description = "Advanced Encryption Standard implemented in Rust."
 
 [dependencies]
 hex = "0.3"
+clap = "2.32"
