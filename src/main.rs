@@ -74,7 +74,7 @@ fn execute_aes( args : ArgMatches ) -> String
 
     let result = match &*format!( "{}-{}", key_length, opmode ) {
         "aes128-encrypt" => aes128::cipher( text.to_string(), round_key ),
-        "aes128-decrypt" => unimplemented!(),
+        "aes128-decrypt" => aes128::inv_cipher( text.to_string(), round_key ),
         "aes192-encrypt" => unimplemented!(),
         "aes192-decrypt" => unimplemented!(),
         "aes256-encrypt" => unimplemented!(),
