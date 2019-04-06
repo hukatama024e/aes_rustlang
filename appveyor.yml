@@ -3,6 +3,10 @@
 ## Operating System (VM environment) ##
 os: Visual Studio 2015
 
+## Build Matrix ##
+environment:
+  matrix:
+
 ### MSVC Toolchains ###
 
   # Stable 64-bit MSVC
