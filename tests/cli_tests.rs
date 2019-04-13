@@ -42,3 +42,45 @@ fn test_cli_aes128_decrypt() {
         .success()
         .stdout( expect );
 }
+
+#[test]
+fn test_cli_aes192_encrypt() {
+    
+    //FIPS 197 p38 C.2 AES-192 (Nk=6, Nr=12)
+    let text = "00112233445566778899aabbccddeeff";
+    let key = "000102030405060708090a0b0c0d0e0f1011121314151617";
+    let expect = "dda97ca4864cdfe06eaf70a0ec0d7191\n";
+
+    let mut cmd = Command::cargo_bin( env!( "CARGO_PKG_NAME" ) ).expect( "Failed to get binary" );
+
+    cmd.arg( text )
+        .arg( key )
+        .arg( "-k" )
+        .arg( "aes192" )
+        .arg( "-o" )
+        .arg( "encrypt" )
+        .assert()
+        .success()
+        .stdout( expect );
+}
+
+#[test]
+fn test_cli_aes192_decrypt() {
+    
+    //FIPS 197 p38 C.2 AES-192 (Nk=6, Nr=12)
+    let text = "dda97ca4864cdfe06eaf70a0ec0d7191";
+    let key = "000102030405060708090a0b0c0d0e0f1011121314151617";
+    let expect = "00112233445566778899aabbccddeeff\n";
+
+    let mut cmd = Command::cargo_bin( env!( "CARGO_PKG_NAME" ) ).expect( "Failed to get binary" );
+
+    cmd.arg( text )
+        .arg( key )
+        .arg( "-k" )
+        .arg( "aes192" )
+        .arg( "-o" )
+        .arg( "decrypt" )
+        .assert()
+        .success()
+        .stdout( expect );
+}

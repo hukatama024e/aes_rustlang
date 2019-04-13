@@ -2,7 +2,7 @@
 extern crate clap;
 
 use clap::{App, AppSettings, Arg, ArgMatches, ErrorKind};
-use aes_rustlang::aes128;
+use aes_rustlang::{aes128, aes192};
 
 fn main() {
     let args = get_args();
@@ -65,20 +65,36 @@ fn execute_aes( args : ArgMatches ) -> String
     let key_length = args.value_of( "KEY_LENGTH" ).unwrap_or_default();
     let opmode = args.value_of( "OPERATE_MODE" ).unwrap_or_default();
 
-    let round_key = match key_length {
-        "aes128" => aes128::key_expansion( key.to_string() ),
-        "aes192" => unimplemented!(),
+    let result = match key_length {
+        "aes128" => execute_aes128( text, key, opmode ),
+        "aes192" => execute_aes192( text, key, opmode ),
         "aes256" => unimplemented!(),
         _ => unreachable!()
     };
 
-    let result = match &*format!( "{}-{}", key_length, opmode ) {
-        "aes128-encrypt" => aes128::cipher( text.to_string(), round_key ),
-        "aes128-decrypt" => aes128::inv_cipher( text.to_string(), round_key ),
-        "aes192-encrypt" => unimplemented!(),
-        "aes192-decrypt" => unimplemented!(),
-        "aes256-encrypt" => unimplemented!(),
-        "aes256-decrypt" => unimplemented!(),
+    result
+}
+
+fn execute_aes128( text : &str, key : &str, operate_mode : &str ) -> String
+{
+    let round_key = aes128::key_expansion( key.to_string() );
+
+    let result = match &*format!( "{}", operate_mode ) {
+        "encrypt" => aes128::cipher( text.to_string(), round_key ),
+        "decrypt" => aes128::inv_cipher( text.to_string(), round_key ),
+        _ => unreachable!()
+    };
+
+    result
+}
+
+fn execute_aes192( text : &str, key : &str, operate_mode : &str ) -> String
+{
+    let round_key = aes192::key_expansion( key.to_string() );
+
+    let result = match &*format!( "{}", operate_mode ) {
+        "encrypt" => aes192::cipher( text.to_string(), round_key ),
+        "decrypt" => aes192::inv_cipher( text.to_string(), round_key ),
         _ => unreachable!()
     };
 
