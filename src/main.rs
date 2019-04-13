@@ -63,12 +63,12 @@ fn execute_aes( args : ArgMatches ) -> String
     let text = args.value_of( "TEXT" ).unwrap_or_default();
     let key = args.value_of( "KEYS" ).unwrap_or_default();
     let key_length = args.value_of( "KEY_LENGTH" ).unwrap_or_default();
-    let opmode = args.value_of( "OPERATE_MODE" ).unwrap_or_default();
+    let operate_mode = args.value_of( "OPERATE_MODE" ).unwrap_or_default();
 
     let result = match key_length {
-        "aes128" => execute_aes128( text, key, opmode ),
-        "aes192" => execute_aes192( text, key, opmode ),
-        "aes256" => execute_aes256( text, key, opmode ),
+        "aes128" => execute_aes128( text, key, operate_mode ),
+        "aes192" => execute_aes192( text, key, operate_mode ),
+        "aes256" => execute_aes256( text, key, operate_mode ),
         _ => unreachable!()
     };
 
@@ -79,7 +79,7 @@ fn execute_aes128( text : &str, key : &str, operate_mode : &str ) -> String
 {
     let round_key = aes128::key_expansion( key.to_string() );
 
-    let result = match &*format!( "{}", operate_mode ) {
+    let result = match operate_mode {
         "encrypt" => aes128::cipher( text.to_string(), round_key ),
         "decrypt" => aes128::inv_cipher( text.to_string(), round_key ),
         _ => unreachable!()
@@ -92,7 +92,7 @@ fn execute_aes192( text : &str, key : &str, operate_mode : &str ) -> String
 {
     let round_key = aes192::key_expansion( key.to_string() );
 
-    let result = match &*format!( "{}", operate_mode ) {
+    let result = match operate_mode {
         "encrypt" => aes192::cipher( text.to_string(), round_key ),
         "decrypt" => aes192::inv_cipher( text.to_string(), round_key ),
         _ => unreachable!()
@@ -105,7 +105,7 @@ fn execute_aes256( text : &str, key : &str, operate_mode : &str ) -> String
 {
     let round_key = aes256::key_expansion( key.to_string() );
 
-    let result = match &*format!( "{}", operate_mode ) {
+    let result = match operate_mode {
         "encrypt" => aes256::cipher( text.to_string(), round_key ),
         "decrypt" => aes256::inv_cipher( text.to_string(), round_key ),
         _ => unreachable!()
