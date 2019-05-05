@@ -2,7 +2,7 @@
 extern crate clap;
 
 use clap::{App, AppSettings, Arg, ArgMatches, ErrorKind};
-use aes_rustlang::{aes128, aes192, aes256};
+use aes_rustlang::{aes128, aes192, aes256, block_cipher_mode};
 
 fn main() {
     let args = get_args();
@@ -51,7 +51,7 @@ fn get_args<'a>() -> clap::Result<ArgMatches<'a>> {
                 .short( "opmode" )
                 .long( "operate_mode" )
                 .help( "Operation mode")
-                .possible_values(&["encrypt", "decrypt"])
+                .possible_values(&["encrypt", "decrypt", "ecb-encrypt", "ecb-decrypt"])
                 .default_value( "encrypt" )
                 .takes_value( true )
         )
@@ -65,51 +65,66 @@ fn execute_aes( args : ArgMatches ) -> String
     let key_length = args.value_of( "KEY_LENGTH" ).unwrap_or_default();
     let operate_mode = args.value_of( "OPERATE_MODE" ).unwrap_or_default();
 
-    let result = match key_length {
-        "aes128" => execute_aes128( text, key, operate_mode ),
-        "aes192" => execute_aes192( text, key, operate_mode ),
-        "aes256" => execute_aes256( text, key, operate_mode ),
+    let result = match &*format!( "{}-{}", key_length, operate_mode ) {
+        "aes128-encrypt" => encrypt_aes128( text.to_string(), key.to_string() ),
+        "aes192-encrypt" => encrypt_aes192( text.to_string(), key.to_string() ),
+        "aes256-encrypt" => encrypt_aes256( text.to_string(), key.to_string() ),
+        "aes128-ecb-encrypt" => block_cipher_mode::encrypt_ecb_mode(text.to_string(), key.to_string(), encrypt_aes128 ),
+        "aes192-ecb-encrypt" => block_cipher_mode::encrypt_ecb_mode(text.to_string(), key.to_string(), encrypt_aes192 ),
+        "aes256-ecb-encrypt" => block_cipher_mode::encrypt_ecb_mode(text.to_string(), key.to_string(), encrypt_aes256 ),
+        "aes128-decrypt" => decrypt_aes128( text.to_string(), key.to_string() ),
+        "aes192-decrypt" => decrypt_aes192( text.to_string(), key.to_string() ),
+        "aes256-decrypt" => decrypt_aes256( text.to_string(), key.to_string() ),
         _ => unreachable!()
     };
 
     result
 }
 
-fn execute_aes128( text : &str, key : &str, operate_mode : &str ) -> String
+fn encrypt_aes128( text : String, key : String ) -> String
 {
-    let round_key = aes128::key_expansion( key.to_string() );
-
-    let result = match operate_mode {
-        "encrypt" => aes128::cipher( text.to_string(), round_key ),
-        "decrypt" => aes128::inv_cipher( text.to_string(), round_key ),
-        _ => unreachable!()
-    };
+    let round_key = aes128::key_expansion( key );
+    let result = aes128::cipher( text, round_key );
 
     result
 }
 
-fn execute_aes192( text : &str, key : &str, operate_mode : &str ) -> String
+fn encrypt_aes192( text : String, key : String ) -> String
 {
-    let round_key = aes192::key_expansion( key.to_string() );
-
-    let result = match operate_mode {
-        "encrypt" => aes192::cipher( text.to_string(), round_key ),
-        "decrypt" => aes192::inv_cipher( text.to_string(), round_key ),
-        _ => unreachable!()
-    };
+    let round_key = aes192::key_expansion( key );
+    let result = aes192::cipher( text, round_key );
 
     result
 }
 
-fn execute_aes256( text : &str, key : &str, operate_mode : &str ) -> String
+fn encrypt_aes256( text : String, key : String ) -> String
 {
-    let round_key = aes256::key_expansion( key.to_string() );
+    let round_key = aes256::key_expansion( key );
+    let result = aes256::cipher( text, round_key );
 
-    let result = match operate_mode {
-        "encrypt" => aes256::cipher( text.to_string(), round_key ),
-        "decrypt" => aes256::inv_cipher( text.to_string(), round_key ),
-        _ => unreachable!()
-    };
+    result
+}
+
+fn decrypt_aes128( text : String, key : String ) -> String
+{
+    let round_key = aes128::key_expansion( key );
+    let result = aes128::inv_cipher( text, round_key );
+
+    result
+}
+
+fn decrypt_aes192( text : String, key : String ) -> String
+{
+    let round_key = aes192::key_expansion( key );
+    let result = aes192::inv_cipher( text, round_key );
+
+    result
+}
+
+fn decrypt_aes256( text : String, key : String ) -> String
+{
+    let round_key = aes256::key_expansion( key );
+    let result = aes256::inv_cipher( text, round_key );
 
     result
 }
