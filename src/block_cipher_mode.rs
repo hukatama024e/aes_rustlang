@@ -64,3 +64,91 @@ fn divide_blocks( text : String ) -> Vec<String> {
 
     blocks
 }
+
+#[test]
+fn test_add_padding() {
+    let input = ["XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                 "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                 "XXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                 "XXXXXXXXXXXXXXXXXXXXXXXXXX",
+                 "XXXXXXXXXXXXXXXXXXXXXXXX",
+                 "XXXXXXXXXXXXXXXXXXXXXX",
+                 "XXXXXXXXXXXXXXXXXXXX",
+                 "XXXXXXXXXXXXXXXXXX",
+                 "XXXXXXXXXXXXXXXX",
+                 "XXXXXXXXXXXXXX",
+                 "XXXXXXXXXXXX",
+                 "XXXXXXXXXX",
+                 "XXXXXXXX",
+                 "XXXXXX",
+                 "XXXX",
+                 "XX",
+    ];
+
+    let expect = ["XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX10101010101010101010101010101010",
+                 "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX01",
+                 "XXXXXXXXXXXXXXXXXXXXXXXXXXXX0202",
+                 "XXXXXXXXXXXXXXXXXXXXXXXXXX030303",
+                 "XXXXXXXXXXXXXXXXXXXXXXXX04040404",
+                 "XXXXXXXXXXXXXXXXXXXXXX0505050505",
+                 "XXXXXXXXXXXXXXXXXXXX060606060606",
+                 "XXXXXXXXXXXXXXXXXX07070707070707",
+                 "XXXXXXXXXXXXXXXX0808080808080808",
+                 "XXXXXXXXXXXXXX090909090909090909",
+                 "XXXXXXXXXXXX0A0A0A0A0A0A0A0A0A0A",
+                 "XXXXXXXXXX0B0B0B0B0B0B0B0B0B0B0B",
+                 "XXXXXXXX0C0C0C0C0C0C0C0C0C0C0C0C",
+                 "XXXXXX0D0D0D0D0D0D0D0D0D0D0D0D0D",
+                 "XXXX0E0E0E0E0E0E0E0E0E0E0E0E0E0E",
+                 "XX0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F",
+    ];
+
+    for i in 0..input.len() {
+        let actual = add_padding( input[i].to_string() );
+        assert_eq!( actual, expect[i].to_string() );
+    }
+}
+
+#[test]
+fn test_remove_padding() {
+    let input = ["XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX10101010101010101010101010101010",
+                 "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX01",
+                 "XXXXXXXXXXXXXXXXXXXXXXXXXXXX0202",
+                 "XXXXXXXXXXXXXXXXXXXXXXXXXX030303",
+                 "XXXXXXXXXXXXXXXXXXXXXXXX04040404",
+                 "XXXXXXXXXXXXXXXXXXXXXX0505050505",
+                 "XXXXXXXXXXXXXXXXXXXX060606060606",
+                 "XXXXXXXXXXXXXXXXXX07070707070707",
+                 "XXXXXXXXXXXXXXXX0808080808080808",
+                 "XXXXXXXXXXXXXX090909090909090909",
+                 "XXXXXXXXXXXX0A0A0A0A0A0A0A0A0A0A",
+                 "XXXXXXXXXX0B0B0B0B0B0B0B0B0B0B0B",
+                 "XXXXXXXX0C0C0C0C0C0C0C0C0C0C0C0C",
+                 "XXXXXX0D0D0D0D0D0D0D0D0D0D0D0D0D",
+                 "XXXX0E0E0E0E0E0E0E0E0E0E0E0E0E0E",
+                 "XX0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F",
+    ];
+
+    let expect = ["XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                  "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                  "XXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                  "XXXXXXXXXXXXXXXXXXXXXXXXXX",
+                  "XXXXXXXXXXXXXXXXXXXXXXXX",
+                  "XXXXXXXXXXXXXXXXXXXXXX",
+                  "XXXXXXXXXXXXXXXXXXXX",
+                  "XXXXXXXXXXXXXXXXXX",
+                  "XXXXXXXXXXXXXXXX",
+                  "XXXXXXXXXXXXXX",
+                  "XXXXXXXXXXXX",
+                  "XXXXXXXXXX",
+                  "XXXXXXXX",
+                  "XXXXXX",
+                  "XXXX",
+                  "XX",
+    ];
+
+    for i in 0..input.len() {
+        let actual = remove_padding( input[i].to_string() );
+        assert_eq!( actual, expect[i].to_string() );
+    }
+}
