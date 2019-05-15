@@ -27,12 +27,8 @@ pub fn decrypt_ecb_mode( cipher_text : String, key : String, inv_cipher_func : f
 }
 
 fn add_padding( text : String ) -> String {
-    let mut padding_num = ( text.len() % CIPHER_BLOCK_SIZE ) / 2;
-    if padding_num == 0 {
-        padding_num = CIPHER_BLOCK_SIZE / 2; 
-    }
-
-    let padding_text = format!( "{:0x}", padding_num );
+    let padding_num = ( CIPHER_BLOCK_SIZE - ( text.len() % CIPHER_BLOCK_SIZE ) ) / 2;
+    let padding_text = format!( "{:02x}", padding_num );
     let padded_text = format!( "{}{}", text, padding_text.repeat( padding_num ) );
 
     padded_text
@@ -95,12 +91,12 @@ fn test_add_padding() {
                  "XXXXXXXXXXXXXXXXXX07070707070707",
                  "XXXXXXXXXXXXXXXX0808080808080808",
                  "XXXXXXXXXXXXXX090909090909090909",
-                 "XXXXXXXXXXXX0A0A0A0A0A0A0A0A0A0A",
-                 "XXXXXXXXXX0B0B0B0B0B0B0B0B0B0B0B",
-                 "XXXXXXXX0C0C0C0C0C0C0C0C0C0C0C0C",
-                 "XXXXXX0D0D0D0D0D0D0D0D0D0D0D0D0D",
-                 "XXXX0E0E0E0E0E0E0E0E0E0E0E0E0E0E",
-                 "XX0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F",
+                 "XXXXXXXXXXXX0a0a0a0a0a0a0a0a0a0a",
+                 "XXXXXXXXXX0b0b0b0b0b0b0b0b0b0b0b",
+                 "XXXXXXXX0c0c0c0c0c0c0c0c0c0c0c0c",
+                 "XXXXXX0d0d0d0d0d0d0d0d0d0d0d0d0d",
+                 "XXXX0e0e0e0e0e0e0e0e0e0e0e0e0e0e",
+                 "XX0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f",
     ];
 
     for i in 0..input.len() {
@@ -121,12 +117,12 @@ fn test_remove_padding() {
                  "XXXXXXXXXXXXXXXXXX07070707070707",
                  "XXXXXXXXXXXXXXXX0808080808080808",
                  "XXXXXXXXXXXXXX090909090909090909",
-                 "XXXXXXXXXXXX0A0A0A0A0A0A0A0A0A0A",
-                 "XXXXXXXXXX0B0B0B0B0B0B0B0B0B0B0B",
-                 "XXXXXXXX0C0C0C0C0C0C0C0C0C0C0C0C",
-                 "XXXXXX0D0D0D0D0D0D0D0D0D0D0D0D0D",
-                 "XXXX0E0E0E0E0E0E0E0E0E0E0E0E0E0E",
-                 "XX0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F",
+                 "XXXXXXXXXXXX0a0a0a0a0a0a0a0a0a0a",
+                 "XXXXXXXXXX0b0b0b0b0b0b0b0b0b0b0b",
+                 "XXXXXXXX0c0c0c0c0c0c0c0c0c0c0c0c",
+                 "XXXXXX0d0d0d0d0d0d0d0d0d0d0d0d0d",
+                 "XXXX0e0e0e0e0e0e0e0e0e0e0e0e0e0e",
+                 "XX0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f",
     ];
 
     let expect = ["XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
