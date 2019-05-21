@@ -51,8 +51,16 @@ fn get_args<'a>() -> clap::Result<ArgMatches<'a>> {
                 .short( "opmode" )
                 .long( "operate_mode" )
                 .help( "Operation mode")
-                .possible_values(&["encrypt", "decrypt", "ecb-encrypt", "ecb-decrypt"])
+                .possible_values( &["encrypt", "decrypt", "ecb-encrypt", "ecb-decrypt", "cbc-encrypt", "cbc-decrypt"] )
                 .default_value( "encrypt" )
+                .takes_value( true )
+        )
+        .arg(
+            Arg::with_name( "INITIALIZATION_VECTOR" )
+                .short( "iv" )
+                .long( "initilzation_vector" )
+                .help( "Initilzation vector")
+                .default_value( "" )
                 .takes_value( true )
         )
         .get_matches_safe()
@@ -64,6 +72,7 @@ fn execute_aes( args : ArgMatches ) -> String
     let key = args.value_of( "KEYS" ).unwrap_or_default();
     let key_length = args.value_of( "KEY_LENGTH" ).unwrap_or_default();
     let operate_mode = args.value_of( "OPERATE_MODE" ).unwrap_or_default();
+    let iv = args.value_of( "INITIALIZATION_VECTOR" ).unwrap_or_default();
 
     let result = match &*format!( "{}-{}", key_length, operate_mode ) {
         "aes128-encrypt" => encrypt_aes128( text.to_string(), key.to_string() ),
@@ -72,6 +81,9 @@ fn execute_aes( args : ArgMatches ) -> String
         "aes128-ecb-encrypt" => block_cipher_mode::encrypt_ecb_mode(text.to_string(), key.to_string(), encrypt_aes128 ),
         "aes192-ecb-encrypt" => block_cipher_mode::encrypt_ecb_mode(text.to_string(), key.to_string(), encrypt_aes192 ),
         "aes256-ecb-encrypt" => block_cipher_mode::encrypt_ecb_mode(text.to_string(), key.to_string(), encrypt_aes256 ),
+        "aes128-cbc-encrypt" => block_cipher_mode::encrypt_cbc_mode(text.to_string(), key.to_string(), iv.to_string(), encrypt_aes128 ),
+        "aes192-cbc-encrypt" => block_cipher_mode::encrypt_cbc_mode(text.to_string(), key.to_string(), iv.to_string(), encrypt_aes192 ),
+        "aes256-cbc-encrypt" => block_cipher_mode::encrypt_cbc_mode(text.to_string(), key.to_string(), iv.to_string(), encrypt_aes256 ),
         "aes128-decrypt" => decrypt_aes128( text.to_string(), key.to_string() ),
         "aes192-decrypt" => decrypt_aes192( text.to_string(), key.to_string() ),
         "aes256-decrypt" => decrypt_aes256( text.to_string(), key.to_string() ),

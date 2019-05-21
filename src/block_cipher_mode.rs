@@ -15,6 +15,21 @@ pub fn encrypt_ecb_mode( plain_text : String, key : String, cipher_func : fn( St
     output_blocks.join( "" )
 }
 
+pub fn encrypt_cbc_mode( plain_text : String, key : String, iv : String, cipher_func : fn( String, String ) -> String ) -> String {
+    let text = add_padding( plain_text );
+    let input_blocks = divide_blocks( text );
+    let mut output_blocks : Vec<String> = Vec::new();
+    let mut next_xor_text = iv;
+
+    for i in 0..input_blocks.len() {
+        let input_text = xor_text( input_blocks[i].clone(), next_xor_text );
+        output_blocks.push( cipher_func( input_text, key.clone() ) );
+        next_xor_text = output_blocks[ i ].clone();
+    }
+
+    output_blocks.join( "" )
+}
+
 pub fn decrypt_ecb_mode( cipher_text : String, key : String, inv_cipher_func : fn( String, String ) -> String ) -> String {
     let input_blocks = divide_blocks( cipher_text );
     let mut output_blocks : Vec<String> = Vec::new();
@@ -59,6 +74,20 @@ fn divide_blocks( text : String ) -> Vec<String> {
     }
 
     blocks
+}
+
+fn xor_text( text1 : String, text2 : String ) -> String {
+    assert!( text1.len() == text2.len() );
+
+    let text1_hex = hex::decode( text1 ).expect( "Failed to convert text to hex" );
+    let text2_hex = hex::decode( text2 ).expect( "Failed to convert text to hex" );
+    let mut xor_hex = Vec::new();
+
+    for i in 0..text1_hex.len() {
+        xor_hex.push( text1_hex[i] ^ text2_hex[i] );
+    }
+
+    hex::encode( xor_hex )
 }
 
 #[test]
