@@ -5,8 +5,14 @@ Advanced Encryption Standard implimented in Rust
 
 ## Feature
 
-* Support AES encryption and decryption(not support ECB and CBC mode yet).
+* Support AES encryption and decryption.
 * Support AES128, AES192, and AES256.
+
+## Block cipher mode
+
+* Support ECB and CBC mode.
+* Add padding when text is multiple of the block size(32 characters).
+* Support PKCS#7 padding.
 
 ## Usage
 
@@ -15,11 +21,15 @@ USAGE:
     aes_rustlang.exe <TEXT> <KEYS>
 
 OPTIONS:
-    -k, --key_length <KEY_LENGTH>        Key length parameter [default: aes128]  [possible values: aes128, aes192,
-                                         aes256]
-    -o, --operate_mode <OPERATE_MODE>    Operation mode [default: encrypt]  [possible values: encrypt, decrypt]
-    -h, --help                           Prints help information
-    -V, --version                        Prints version information
+    -i, --initilzation_vector <INITIALIZATION_VECTOR>    Initilzation vector [default: ]
+    -k, --key_length <KEY_LENGTH>
+            Key length parameter [default: aes128]  [possible values: aes128, aes192, aes256]
+
+    -o, --operate_mode <OPERATE_MODE>
+            Operation mode [default: encrypt]  [possible values: encrypt, decrypt, ecb-encrypt, ecb-decrypt, cbc-
+            encrypt, cbc-decrypt]
+    -h, --help                                           Prints help information
+    -V, --version                                        Prints version information
 
 ARGS:
     <TEXT>    Plain text for encryption or encrypted text for decryption
