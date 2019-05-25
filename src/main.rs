@@ -90,6 +90,9 @@ fn execute_aes( args : ArgMatches ) -> String
         "aes128-ecb-decrypt" => block_cipher_mode::decrypt_ecb_mode(text.to_string(), key.to_string(), decrypt_aes128 ),
         "aes192-ecb-decrypt" => block_cipher_mode::decrypt_ecb_mode(text.to_string(), key.to_string(), decrypt_aes192 ),
         "aes256-ecb-decrypt" => block_cipher_mode::decrypt_ecb_mode(text.to_string(), key.to_string(), decrypt_aes256 ),
+        "aes128-cbc-decrypt" => block_cipher_mode::decrypt_cbc_mode(text.to_string(), key.to_string(), iv.to_string(), decrypt_aes128 ),
+        "aes192-cbc-decrypt" => block_cipher_mode::decrypt_cbc_mode(text.to_string(), key.to_string(), iv.to_string(), decrypt_aes192 ),
+        "aes256-cbc-decrypt" => block_cipher_mode::decrypt_cbc_mode(text.to_string(), key.to_string(), iv.to_string(), decrypt_aes256 ),
         _ => unreachable!()
     };
 

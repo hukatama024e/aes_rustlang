@@ -41,6 +41,21 @@ pub fn decrypt_ecb_mode( cipher_text : String, key : String, inv_cipher_func : f
     remove_padding( output_blocks.join( "" ) )
 }
 
+pub fn decrypt_cbc_mode( cipher_text : String, key : String, iv : String, inv_cipher_func : fn( String, String ) -> String ) -> String {
+    let input_blocks = divide_blocks( cipher_text );
+    let mut output_blocks : Vec<String> = Vec::new();
+    let mut next_xor_text = iv;
+
+    for i in 0..input_blocks.len() {
+        let inv_cipher_text = inv_cipher_func( input_blocks[ i ].clone(), key.clone() );
+        
+        output_blocks.push( xor_text( inv_cipher_text, next_xor_text ) );
+        next_xor_text = input_blocks[ i ].clone();
+    }
+
+    remove_padding( output_blocks.join( "" ) )
+}
+
 fn add_padding( text : String ) -> String {
     let padding_num = ( CIPHER_BLOCK_SIZE - ( text.len() % CIPHER_BLOCK_SIZE ) ) / 2;
     let padding_text = format!( "{:02x}", padding_num );
