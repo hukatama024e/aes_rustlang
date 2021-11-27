@@ -6,7 +6,23 @@ const KEY_LENGTH : usize = 6;
 
 const R_CON : [u8; 8] = [0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80];
 
-pub fn cipher( plain_text : String, round_key : [u32; aes_common::BLOCK_SIZE * ( ROUND_NUM + 1 )] ) -> String {
+pub fn encrypt( text : String, key : String ) -> String
+{
+    let round_key = key_expansion( key );
+    let result = cipher( text, round_key );
+
+    result
+}
+
+pub fn decrypt( text : String, key : String ) -> String
+{
+    let round_key = key_expansion( key );
+    let result = inv_cipher( text, round_key );
+
+    result
+}
+
+fn cipher( plain_text : String, round_key : [u32; aes_common::BLOCK_SIZE * ( ROUND_NUM + 1 )] ) -> String {
     let mut state : [[u8; aes_common::WORD_IN_BYTES_NUM]; aes_common::BLOCK_SIZE] = aes_common::text_to_state( plain_text );
     let encrypted_text : String;
 
@@ -28,7 +44,7 @@ pub fn cipher( plain_text : String, round_key : [u32; aes_common::BLOCK_SIZE * (
     return encrypted_text;
 }
 
-pub fn inv_cipher( plain_text : String, round_key : [u32; aes_common::BLOCK_SIZE * ( ROUND_NUM + 1 )] ) -> String {
+fn inv_cipher( plain_text : String, round_key : [u32; aes_common::BLOCK_SIZE * ( ROUND_NUM + 1 )] ) -> String {
     let mut state : [[u8; aes_common::WORD_IN_BYTES_NUM]; aes_common::BLOCK_SIZE] = aes_common::text_to_state( plain_text );
     let decrypted_text : String;
 
@@ -64,7 +80,7 @@ fn add_round_key( input_state : [[u8; aes_common::WORD_IN_BYTES_NUM]; aes_common
     return output_state;
 }
 
-pub fn key_expansion( key : String ) ->  [u32; aes_common::BLOCK_SIZE*( ROUND_NUM + 1 )] {
+fn key_expansion( key : String ) ->  [u32; aes_common::BLOCK_SIZE*( ROUND_NUM + 1 )] {
     let mut round_key : [u32; aes_common::BLOCK_SIZE * ( ROUND_NUM + 1 )] = [0; aes_common::BLOCK_SIZE * ( ROUND_NUM + 1 )];
     let mut i : usize = 0;
     let mut temp : u32;

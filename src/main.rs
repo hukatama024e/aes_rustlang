@@ -75,74 +75,26 @@ fn execute_aes( args : ArgMatches ) -> String
     let iv = args.value_of( "INITIALIZATION_VECTOR" ).unwrap_or_default();
 
     let result = match &*format!( "{}-{}", key_length, operate_mode ) {
-        "aes128-encrypt" => encrypt_aes128( text.to_string(), key.to_string() ),
-        "aes192-encrypt" => encrypt_aes192( text.to_string(), key.to_string() ),
-        "aes256-encrypt" => encrypt_aes256( text.to_string(), key.to_string() ),
-        "aes128-ecb-encrypt" => block_cipher_mode::encrypt_ecb_mode(text.to_string(), key.to_string(), encrypt_aes128 ),
-        "aes192-ecb-encrypt" => block_cipher_mode::encrypt_ecb_mode(text.to_string(), key.to_string(), encrypt_aes192 ),
-        "aes256-ecb-encrypt" => block_cipher_mode::encrypt_ecb_mode(text.to_string(), key.to_string(), encrypt_aes256 ),
-        "aes128-cbc-encrypt" => block_cipher_mode::encrypt_cbc_mode(text.to_string(), key.to_string(), iv.to_string(), encrypt_aes128 ),
-        "aes192-cbc-encrypt" => block_cipher_mode::encrypt_cbc_mode(text.to_string(), key.to_string(), iv.to_string(), encrypt_aes192 ),
-        "aes256-cbc-encrypt" => block_cipher_mode::encrypt_cbc_mode(text.to_string(), key.to_string(), iv.to_string(), encrypt_aes256 ),
-        "aes128-decrypt" => decrypt_aes128( text.to_string(), key.to_string() ),
-        "aes192-decrypt" => decrypt_aes192( text.to_string(), key.to_string() ),
-        "aes256-decrypt" => decrypt_aes256( text.to_string(), key.to_string() ),
-        "aes128-ecb-decrypt" => block_cipher_mode::decrypt_ecb_mode(text.to_string(), key.to_string(), decrypt_aes128 ),
-        "aes192-ecb-decrypt" => block_cipher_mode::decrypt_ecb_mode(text.to_string(), key.to_string(), decrypt_aes192 ),
-        "aes256-ecb-decrypt" => block_cipher_mode::decrypt_ecb_mode(text.to_string(), key.to_string(), decrypt_aes256 ),
-        "aes128-cbc-decrypt" => block_cipher_mode::decrypt_cbc_mode(text.to_string(), key.to_string(), iv.to_string(), decrypt_aes128 ),
-        "aes192-cbc-decrypt" => block_cipher_mode::decrypt_cbc_mode(text.to_string(), key.to_string(), iv.to_string(), decrypt_aes192 ),
-        "aes256-cbc-decrypt" => block_cipher_mode::decrypt_cbc_mode(text.to_string(), key.to_string(), iv.to_string(), decrypt_aes256 ),
+        "aes128-encrypt" => aes128::encrypt( text.to_string(), key.to_string() ),
+        "aes192-encrypt" => aes192::encrypt( text.to_string(), key.to_string() ),
+        "aes256-encrypt" => aes256::encrypt( text.to_string(), key.to_string() ),
+        "aes128-ecb-encrypt" => block_cipher_mode::encrypt_ecb_mode(text.to_string(), key.to_string(), aes128::encrypt ),
+        "aes192-ecb-encrypt" => block_cipher_mode::encrypt_ecb_mode(text.to_string(), key.to_string(), aes192::encrypt ),
+        "aes256-ecb-encrypt" => block_cipher_mode::encrypt_ecb_mode(text.to_string(), key.to_string(), aes256::encrypt ),
+        "aes128-cbc-encrypt" => block_cipher_mode::encrypt_cbc_mode(text.to_string(), key.to_string(), iv.to_string(), aes128::encrypt ),
+        "aes192-cbc-encrypt" => block_cipher_mode::encrypt_cbc_mode(text.to_string(), key.to_string(), iv.to_string(), aes192::encrypt ),
+        "aes256-cbc-encrypt" => block_cipher_mode::encrypt_cbc_mode(text.to_string(), key.to_string(), iv.to_string(), aes256::encrypt ),
+        "aes128-decrypt" => aes128::decrypt( text.to_string(), key.to_string() ),
+        "aes192-decrypt" => aes192::decrypt( text.to_string(), key.to_string() ),
+        "aes256-decrypt" => aes256::decrypt( text.to_string(), key.to_string() ),
+        "aes128-ecb-decrypt" => block_cipher_mode::decrypt_ecb_mode(text.to_string(), key.to_string(), aes128::decrypt ),
+        "aes192-ecb-decrypt" => block_cipher_mode::decrypt_ecb_mode(text.to_string(), key.to_string(), aes192::decrypt ),
+        "aes256-ecb-decrypt" => block_cipher_mode::decrypt_ecb_mode(text.to_string(), key.to_string(), aes256::decrypt ),
+        "aes128-cbc-decrypt" => block_cipher_mode::decrypt_cbc_mode(text.to_string(), key.to_string(), iv.to_string(), aes128::decrypt ),
+        "aes192-cbc-decrypt" => block_cipher_mode::decrypt_cbc_mode(text.to_string(), key.to_string(), iv.to_string(), aes192::decrypt ),
+        "aes256-cbc-decrypt" => block_cipher_mode::decrypt_cbc_mode(text.to_string(), key.to_string(), iv.to_string(), aes256::decrypt ),
         _ => unreachable!()
     };
-
-    result
-}
-
-fn encrypt_aes128( text : String, key : String ) -> String
-{
-    let round_key = aes128::key_expansion( key );
-    let result = aes128::cipher( text, round_key );
-
-    result
-}
-
-fn encrypt_aes192( text : String, key : String ) -> String
-{
-    let round_key = aes192::key_expansion( key );
-    let result = aes192::cipher( text, round_key );
-
-    result
-}
-
-fn encrypt_aes256( text : String, key : String ) -> String
-{
-    let round_key = aes256::key_expansion( key );
-    let result = aes256::cipher( text, round_key );
-
-    result
-}
-
-fn decrypt_aes128( text : String, key : String ) -> String
-{
-    let round_key = aes128::key_expansion( key );
-    let result = aes128::inv_cipher( text, round_key );
-
-    result
-}
-
-fn decrypt_aes192( text : String, key : String ) -> String
-{
-    let round_key = aes192::key_expansion( key );
-    let result = aes192::inv_cipher( text, round_key );
-
-    result
-}
-
-fn decrypt_aes256( text : String, key : String ) -> String
-{
-    let round_key = aes256::key_expansion( key );
-    let result = aes256::inv_cipher( text, round_key );
 
     result
 }
