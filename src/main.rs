@@ -2,7 +2,7 @@
 extern crate clap;
 
 use clap::{App, AppSettings, Arg, ArgMatches, ErrorKind};
-use aes_rustlang::{aes128, aes192, aes256, block_cipher_mode};
+use aes_rustlang::{aes128, aes192, aes256, block_cipher_mode, cmac};
 
 fn main() {
     let args = get_args();
@@ -51,7 +51,7 @@ fn get_args<'a>() -> clap::Result<ArgMatches<'a>> {
                 .short( "opmode" )
                 .long( "operate_mode" )
                 .help( "Operation mode")
-                .possible_values( &["encrypt", "decrypt", "ecb-encrypt", "ecb-decrypt", "cbc-encrypt", "cbc-decrypt"] )
+                .possible_values( &["encrypt", "decrypt", "ecb-encrypt", "ecb-decrypt", "cbc-encrypt", "cbc-decrypt", "cmac"] )
                 .default_value( "encrypt" )
                 .takes_value( true )
         )
@@ -93,6 +93,9 @@ fn execute_aes( args : ArgMatches ) -> String
         "aes128-cbc-decrypt" => block_cipher_mode::decrypt_cbc_mode(text.to_string(), key.to_string(), iv.to_string(), aes128::decrypt ),
         "aes192-cbc-decrypt" => block_cipher_mode::decrypt_cbc_mode(text.to_string(), key.to_string(), iv.to_string(), aes192::decrypt ),
         "aes256-cbc-decrypt" => block_cipher_mode::decrypt_cbc_mode(text.to_string(), key.to_string(), iv.to_string(), aes256::decrypt ),
+        "aes128-cmac" => cmac::generate_aes_cmac(text.to_string(), key.to_string(), aes128::encrypt ),
+        "aes192-cmac" => cmac::generate_aes_cmac(text.to_string(), key.to_string(), aes192::encrypt ),
+        "aes256-cmac" => cmac::generate_aes_cmac(text.to_string(), key.to_string(), aes256::encrypt ),
         _ => unreachable!()
     };
 
