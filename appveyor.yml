@@ -5,6 +5,7 @@ os: Visual Studio 2015
 
 ## Build Matrix ##
 environment:
+  access_token: $(github_personal_access_token)
   matrix:
 
 ### MSVC Toolchains ###
