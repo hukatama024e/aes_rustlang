@@ -7,6 +7,7 @@ Advanced Encryption Standard implimented in Rust
 
 * Support AES encryption and decryption.
 * Support AES128, AES192, and AES256.
+* Support CMAC.
 
 ## Block cipher mode
 
