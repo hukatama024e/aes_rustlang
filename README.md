@@ -18,7 +18,7 @@ Advanced Encryption Standard implimented in Rust
 
 ```
 USAGE:
-    aes_rustlang.exe <TEXT> <KEYS>
+    aes_rustlang <TEXT> <KEYS>
 
 OPTIONS:
     -i, --initilzation_vector <INITIALIZATION_VECTOR>    Initilzation vector [default: ]
@@ -27,7 +27,7 @@ OPTIONS:
 
     -o, --operate_mode <OPERATE_MODE>
             Operation mode [default: encrypt]  [possible values: encrypt, decrypt, ecb-encrypt, ecb-decrypt, cbc-
-            encrypt, cbc-decrypt]
+            encrypt, cbc-decrypt, cmac]
     -h, --help                                           Prints help information
     -V, --version                                        Prints version information
 
