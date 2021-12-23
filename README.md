@@ -1,5 +1,5 @@
 # aes_rustlang
-[![Build status](https://ci.appveyor.com/api/projects/status/uo6o5pr9i885va5b?svg=true)](https://ci.appveyor.com/project/hukatama024e/aes-rustlang)
+[![rust_matrix_ci](https://github.com/hukatama024e/aes_rustlang/actions/workflows/rust_matrix_ci.yml/badge.svg)](https://github.com/hukatama024e/aes_rustlang/actions/workflows/rust_matrix_ci.yml)
 
 Advanced Encryption Standard implimented in Rust
 
